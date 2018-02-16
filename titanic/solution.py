@@ -28,3 +28,8 @@ age_median = data["Age"].median()
 
 with open(os.path.join("output", "age_mean.txt"), mode="w") as f:
     f.write(f"{round(age_mean, 2)} {age_median}")
+
+corr = data["SibSp"].corr(data["Parch"], method="pearson")
+
+with open(os.path.join("output", "corr.txt"), mode="w") as f:
+    f.write(f"{round(corr, 2)}")
