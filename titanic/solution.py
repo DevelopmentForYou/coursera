@@ -1,4 +1,6 @@
 import os
+import re
+from collections import Counter
 
 import pandas as pd
 
@@ -40,3 +42,24 @@ write_file(filename="age_mean.txt", data_to_file=f"{round(age_mean, 2)} {age_med
 corr = data["SibSp"].corr(data["Parch"], method="pearson")
 
 write_file(filename="corr.txt", data_to_file=f"{round(corr, 2)}")
+
+# Finding the most popular female name on the ship
+female_fullnames = data.loc[(data["Sex"] == "female"), ["Name"]]["Name"]
+female_names = []
+
+for name in female_fullnames:
+    if "Mrs." in name:
+        try:
+            female_names.append(re.findall(r"\((.*)\)", name)[0].split()[0])
+        except IndexError:
+            pass
+    elif "Miss." in name:
+        try:
+            female_names.append(re.findall("(Miss.)\s(.+)", name)[0][1].split()[0])
+        except IndexError:
+            pass
+
+count_names = Counter(female_names)
+most_popular_name = max(count_names, key=count_names.get)
+
+write_file(filename="most_popular_name.txt", data_to_file=f"{most_popular_name}")
