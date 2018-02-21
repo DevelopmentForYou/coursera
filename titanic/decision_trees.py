@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 
+from titanic.file import write_file
+
 # Read data from CSV
 df = pd.read_csv("titanic.csv", index_col="PassengerId")
 
@@ -22,6 +24,4 @@ importances = clf.feature_importances_
 importances_dict = dict(zip(columns, importances))
 sorted_values = sorted(importances_dict, key=importances_dict.get, reverse=True)
 
-with open("importance.txt", mode="w") as f:
-    f.write(f"{sorted_values[0]} {sorted_values[1]}")
-
+write_file(sub_dirname="classifier", filename="importance.txt", data_to_file=f"{sorted_values[0]} {sorted_values[1]}")
